@@ -5,15 +5,16 @@ class Ball {
     this.width = BALL_HEIGHT;
     this.height = BALL_HEIGHT;
     // this.gravity = 0.2;
-    this.ball_speed = 5;
+    // this.ball_speed = 5;
     this.y_velocity = 6;
     this.x_velocity = 6;
 
     this.floor = BOARD_HEIGHT - BALL_HEIGHT;
     this.ceiling = 0;
-    this.jumpCounts = 0;
+
     this.left_wall = 0;
     this.right_wall = BOARD_WIDTH - BALL_WIDTH;
+    this.stop_state = false;
   }
 
   //   jump(steps) {
@@ -24,6 +25,27 @@ class Ball {
   //     this.velocity -= 3;
   //     this.jumpCounts += 1;
   //   }
+  stop() {
+    this.x = BOARD_WIDTH - BOARD_WIDTH / 2;
+    this.y = BOARD_HEIGHT / 2;
+    // this.ball_speed = 5;
+    this.y_velocity = 0;
+    this.x_velocity = 0;
+    // if(frameCount %300===0){
+    // this.y_velocity = 6;
+    // this.x_velocity = 6;
+    // }
+    this.stop_state = true;
+    return this.stop_state;
+  }
+  relaunch() {
+    if (this.stop_state && frameCount % 300 == 0) {
+      console.log(frameCount);
+      this.stop_state = false;
+      this.x_velocity = -6;
+      this.y_velocity = 6;
+    }
+  }
 
   draw() {
     // this.velocity += this.gravity;

@@ -3,8 +3,8 @@ function preload() {
   PLAYER = loadImage("/images/tonymanero.jpg");
   DISCO_BALL_PLAYER = loadImage("/images/discoball2.png");
   DISCO_BALL_RIVAL = loadImage("/images/discoball2.png");
-  RIVAL = loadImage("/images/trump.png");
-  BALL = loadImage("/images/covid.jpg");
+  RIVAL = loadImage("/images/frog.png");
+  BALL = loadImage("/images/pork.png");
   BOUNCE_SOUND = loadSound("/sounds/bounce2.mp3");
 }
 
@@ -24,6 +24,5 @@ function draw() {
 
 function keyPressed() {
   if (keyCode === 32) {
-    game.player.jump(20);
   }
 }
