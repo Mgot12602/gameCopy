@@ -22,6 +22,14 @@ function draw() {
   game.draw();
 }
 
+const button = document.querySelector("button");
+
+button.onclick = () => {
+  console.log("clicking");
+  // game.reset();
+  loop();
+};
+
 function keyPressed() {
   if (keyCode === 32) {
   }
