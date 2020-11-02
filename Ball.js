@@ -17,14 +17,11 @@ class Ball {
     this.stop_state = false;
   }
 
-  //   jump(steps) {
-  //     if (this.y <= 0 || this.jumpCounts > 1) {
-  //       return;
-  //     }
-  //     this.y -= steps;
-  //     this.velocity -= 3;
-  //     this.jumpCounts += 1;
-  //   }
+  restart() {
+    this.stop();
+    this.relaunchBall();
+  }
+
   stop() {
     this.x = BOARD_WIDTH - BOARD_WIDTH / 2;
     this.y = BOARD_HEIGHT / 2;
@@ -36,14 +33,18 @@ class Ball {
     // this.x_velocity = 6;
     // }
     this.stop_state = true;
+    COUNTDOWN_SOUND.play(0.5, 1, 0.5, 0, 3);
     return this.stop_state;
   }
-  relaunch() {
+  relaunchBall() {
+    //use this function to set the ball in the middle and wait for 5 seconds until relaunch the ball with a velocity.
+
     if (this.stop_state && frameCount % 300 == 0) {
       console.log(frameCount);
       this.stop_state = false;
       this.x_velocity = -6;
       this.y_velocity = 6;
+      BOUNCE_SOUND.play(0, 1, 1, 0, 1.2);
     }
   }
 

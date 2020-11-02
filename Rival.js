@@ -24,4 +24,11 @@ class Rival {
     }
     image(RIVAL, this.x, this.y, this.width, this.height);
   }
+
+  restart() {
+    this.score = 0;
+    this.x = BOARD_WIDTH - BOARD_WIDTH / 5;
+    this.y = BOARD_HEIGHT / 2;
+    this.velocity = 2;
+  }
 }

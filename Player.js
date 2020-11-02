@@ -24,4 +24,8 @@ class Player {
 
     image(PLAYER, this.x, this.y, this.width, this.height);
   }
+
+  restart() {
+    this.score = 0;
+  }
 }

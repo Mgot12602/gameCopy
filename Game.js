@@ -10,6 +10,7 @@ class Game {
 
   setup() {
     this.board.setup();
+    this.ball.stop();
   }
 
   draw() {
@@ -21,7 +22,7 @@ class Game {
     this.hitPlayer(this.ball, this.player);
     ///here we will check if the ball touches the player's discoball
     if (this.targetCheckPlayer(this.ball, this.board)) {
-      // noLoop();
+      BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
       this.rival.score += 1;
       this.updateScore();
       this.checkGameOver();
@@ -30,7 +31,7 @@ class Game {
     }
     ///here we will check if the ball touches the rival's discoball
     if (this.targetCheckRival(this.ball, this.board)) {
-      // noLoop();
+      BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
       this.player.score += 1;
       this.updateScore();
       this.checkGameOver();
@@ -55,7 +56,13 @@ class Game {
     //     }
     //   });
     this.updateScore();
-    this.ball.relaunch();
+    this.ball.relaunchBall();
+  }
+
+  restart() {
+    this.player.restart();
+    this.rival.restart();
+    this.ball.restart();
   }
 
   checkGameOver() {
@@ -118,6 +125,7 @@ class Game {
       ball.x = rival.x - BALL_WIDTH;
       ball.x_velocity = -ball.x_velocity - 1 / 10;
       ball.y_velocity += rival.velocity;
+      FROG_SOUND.play(0, 1, 1, 0, 0.8);
     }
   }
   hitPlayer(ball, player) {
