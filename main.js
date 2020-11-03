@@ -13,6 +13,8 @@ function preload() {
 }
 
 const game = new Game();
+let screen = 0; //0 is starting page //1 is game //2 is end game
+let music_on = true;
 
 function setup() {
   createCanvas(BOARD_WIDTH, BOARD_HEIGHT);
@@ -26,12 +28,26 @@ function draw() {
   game.draw();
 }
 
-const button = document.querySelector("button");
+const playAgainButton = document.getElementById("play-again");
+const musicOnButton = document.getElementById("music");
 
-button.onclick = () => {
+playAgainButton.onclick = () => {
   console.log("clicking");
   game.restart();
   loop();
+};
+
+musicOnButton.onclick = () => {
+  if (music_on === true) {
+    BACKGROUND_MUSIC.stop();
+    music_on = false;
+
+    return;
+  }
+  console.log("Value of music on should be false", music_on);
+  BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
+  music_on = true;
+  console.log("Value of music on should be true", music_on);
 };
 
 function keyPressed() {

@@ -24,41 +24,25 @@ class Game {
     if (this.targetCheckPlayer(this.ball, this.board)) {
       BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
       this.rival.score += 1;
-      this.updateScore();
+
       this.checkGameOver();
-      this.ball.stop();
-      console.log(`Rival got ${this.rival.score} point`);
     }
     ///here we will check if the ball touches the rival's discoball
     if (this.targetCheckRival(this.ball, this.board)) {
       BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
       this.player.score += 1;
-      this.updateScore();
+      //inside checkGameOver, we stop and relanuch the ball if next round and we stoop looping if score reached the BEST_OF value.
       this.checkGameOver();
-      this.ball.stop();
-
-      console.log(`Player got ${this.player.score} point`);
     }
 
-    // this.UpdateScore();
-
-    //   if (frameCount % 120 === 0) {
-    //     this.obstacles.push(new Obstacle());
-    //   }
-    //   this.obstacles.forEach((obstacle, index) => {
-    //     obstacle.draw();
-    //     if (obstacle.x + obstacle.width < 0) {
-    //       this.obstacles.splice(index, 1);
-    //     }
-    //     if (this.colisionCheck(obstacle, this.player)) {
-    //       noLoop();
-    //       console.log("ohu");
-    //     }
-    //   });
-    this.updateScore();
+    this.drawScore();
+    //IF ball is stopped, we wait until 5 seconds with framecount until ball is relaunched again with a certain velocity.
     this.ball.relaunchBall();
   }
 
+  ///////////////////////
+  ///HERE ALL METHODS///
+  //////////////////////
   restart() {
     this.player.restart();
     this.rival.restart();
@@ -72,6 +56,7 @@ class Game {
       text("YOU WIN!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
 
       noLoop();
+      return true;
     }
     if (this.rival.score === BEST_OF) {
       fill(255);
@@ -79,10 +64,13 @@ class Game {
       text("YOU LOOSE!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
 
       noLoop();
+      return true;
     }
+    this.ball.stop();
+    this.ball.relaunchBall();
   }
 
-  updateScore() {
+  drawScore() {
     fill(255);
     textSize(25);
     text(`YOU: ${this.player.score}`, BOARD_WIDTH / 2 - 200, 25);
