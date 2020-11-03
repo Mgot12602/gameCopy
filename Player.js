@@ -21,7 +21,9 @@ class Player {
     if (this.y >= this.floor) {
       this.y = this.floor;
     }
-
+    if (this.y <= this.ceiling) {
+      this.y = this.ceiling;
+    }
     image(PLAYER, this.x, this.y, this.width, this.height);
   }
 

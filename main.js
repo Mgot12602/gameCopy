@@ -10,22 +10,40 @@ function preload() {
   COUNTDOWN_SOUND = loadSound("/sounds/countdown.mp3");
   FROG_SOUND = loadSound("/sounds/frog.mp3");
   BACKGROUND_MUSIC = loadSound("/sounds/5th.mp3");
+  START_BACKGROUND_IMG = loadImage("/images/travolta.png");
+  INTRO_MUSIC = loadSound("/sounds/shinydisco.mp3");
 }
 
 const game = new Game();
+const startScreen = new StartScreen();
 let screen = 0; //0 is starting page //1 is game //2 is end game
 let music_on = true;
+let pauseStatus = false;
 
 function setup() {
-  createCanvas(BOARD_WIDTH, BOARD_HEIGHT);
+  let canvas = createCanvas(BOARD_WIDTH, BOARD_HEIGHT);
+  canvas.parent("canvas-holder");
+  startScreen.setup();
   game.setup();
-  BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
+  // BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
 }
 
 function draw() {
   clear();
-  background("cyan");
-  game.draw();
+  background("black");
+  switch (screen) {
+    case 0:
+      // console.log(screen);
+      startScreen.draw();
+      return;
+    case 1:
+      clear();
+
+      // console.log("am playing the game???");
+      // console.log(screen);
+      game.draw();
+      return;
+  }
 }
 
 const playAgainButton = document.getElementById("play-again");
@@ -38,19 +56,32 @@ playAgainButton.onclick = () => {
 };
 
 musicOnButton.onclick = () => {
-  if (music_on === true) {
+  if (music_on) {
     BACKGROUND_MUSIC.stop();
     music_on = false;
-
+    console.log("Value of music on should be false", music_on);
     return;
   }
-  console.log("Value of music on should be false", music_on);
+
   BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
   music_on = true;
   console.log("Value of music on should be true", music_on);
 };
 
 function keyPressed() {
-  if (keyCode === 32) {
+  //If we press spacebar during the game (screen==1), we pause.
+  if (keyCode === 32 && screen == 1) {
+    if (pauseStatus) {
+      loop();
+      pauseStatus = false;
+      if (music_on) {
+        //seems this is not working...
+        BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
+      }
+      return;
+    }
+    noLoop();
+    BACKGROUND_MUSIC.stop();
+    pauseStatus = true;
   }
 }

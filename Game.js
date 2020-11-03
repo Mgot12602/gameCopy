@@ -4,16 +4,20 @@ class Game {
     this.board = new Board();
     this.rival = new Rival();
     this.ball = new Ball();
+    this.musicPlayed = false;
+    this.player_wins = false;
+    this.rival_wins = false;
 
     //   this.obstacles = [];
   }
 
   setup() {
     this.board.setup();
-    this.ball.stop();
+    // this.ball.stop();
   }
 
   draw() {
+    this.musicPlay();
     this.board.draw();
     this.player.draw();
     this.rival.draw();
@@ -34,19 +38,62 @@ class Game {
       //inside checkGameOver, we stop and relanuch the ball if next round and we stoop looping if score reached the BEST_OF value.
       this.checkGameOver();
     }
-
+    // this.checkGameOver();
+    // this.gameOver();
     this.drawScore();
+    this.gameOver();
     //IF ball is stopped, we wait until 5 seconds with framecount until ball is relaunched again with a certain velocity.
-    this.ball.relaunchBall();
+    if (!this.player_wins && !this.rival_wins) {
+      this.ball.relaunchBall();
+    }
   }
 
   ///////////////////////
   ///HERE ALL METHODS///
   //////////////////////
+  musicPlay() {
+    if (music_on && !pauseStatus && !this.musicPlayed) {
+      BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
+      this.musicPlayed = true;
+    }
+  }
+
   restart() {
     this.player.restart();
     this.rival.restart();
     this.ball.restart();
+  }
+
+  gameOver() {
+    if (this.player_wins) {
+      fill(255);
+      textSize(50);
+      this.ball.y_velocity = 0;
+      this.ball.x_velocity = 0;
+      this.ball.x = BOARD_WIDTH - BOARD_WIDTH / 2;
+      this.ball.y = BOARD_HEIGHT / 2;
+
+      text("YOU WIN!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
+      if (frameCount % 600 == 0) {
+        console.log("im getting here");
+
+        screen = 0;
+      }
+    }
+    if (this.rival_wins) {
+      fill(255);
+      textSize(50);
+      this.ball.y_velocity = 0;
+      this.ball.x_velocity = 0;
+      this.ball.x = BOARD_WIDTH - BOARD_WIDTH / 2;
+      this.ball.y = BOARD_HEIGHT / 2;
+      text("YOU LOOSE!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
+      if (frameCount % 600 == 0) {
+        console.log("im getting here");
+
+        screen = 0;
+      }
+    }
   }
 
   checkGameOver() {
@@ -54,16 +101,17 @@ class Game {
       fill(255);
       textSize(50);
       text("YOU WIN!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
-
-      noLoop();
+      BACKGROUND_MUSIC.stop();
+      this.player_wins = true;
       return true;
     }
     if (this.rival.score === BEST_OF) {
       fill(255);
       textSize(50);
       text("YOU LOOSE!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
-
-      noLoop();
+      BACKGROUND_MUSIC.stop();
+      this.rival_wins = true;
+      // noLoop();
       return true;
     }
     this.ball.stop();
