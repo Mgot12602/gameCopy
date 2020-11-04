@@ -33,5 +33,6 @@ class StartScreen {
   draw() {
     this.musicPlay();
     image(START_BACKGROUND_IMG, 0, 0, 500, 730);
+    playButton.show();
   }
 }

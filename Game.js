@@ -7,13 +7,11 @@ class Game {
     this.musicPlayed = false;
     this.player_wins = false;
     this.rival_wins = false;
-
-    //   this.obstacles = [];
+    this.isGameOver = false;
   }
 
   setup() {
     this.board.setup();
-    // this.ball.stop();
   }
 
   draw() {
@@ -24,7 +22,20 @@ class Game {
     this.ball.draw();
     this.hitRival(this.ball, this.rival);
     this.hitPlayer(this.ball, this.player);
+    this.targetCheck();
     ///here we will check if the ball touches the player's discoball
+    this.drawScore();
+    this.gameOver();
+    //IF ball is stopped, we wait until 5 seconds with framecount until ball is relaunched again with a certain velocity.
+    if (!this.isGameOver) {
+      this.ball.relaunchBall();
+    }
+  }
+
+  ///////////////////////
+  ///HERE ALL METHODS///
+  //////////////////////
+  targetCheck() {
     if (this.targetCheckPlayer(this.ball, this.board)) {
       BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
       this.rival.score += 1;
@@ -38,19 +49,8 @@ class Game {
       //inside checkGameOver, we stop and relanuch the ball if next round and we stoop looping if score reached the BEST_OF value.
       this.checkGameOver();
     }
-    // this.checkGameOver();
-    // this.gameOver();
-    this.drawScore();
-    this.gameOver();
-    //IF ball is stopped, we wait until 5 seconds with framecount until ball is relaunched again with a certain velocity.
-    if (!this.player_wins && !this.rival_wins) {
-      this.ball.relaunchBall();
-    }
   }
 
-  ///////////////////////
-  ///HERE ALL METHODS///
-  //////////////////////
   musicPlay() {
     if (music_on && !pauseStatus && !this.musicPlayed) {
       BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
@@ -65,54 +65,50 @@ class Game {
   }
 
   gameOver() {
-    if (this.player_wins) {
-      fill(255);
-      textSize(50);
+    if (this.isGameOver) {
       this.ball.y_velocity = 0;
       this.ball.x_velocity = 0;
       this.ball.x = BOARD_WIDTH - BOARD_WIDTH / 2;
       this.ball.y = BOARD_HEIGHT / 2;
 
-      text("YOU WIN!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
-      if (frameCount % 600 == 0) {
-        console.log("im getting here");
-
-        screen = 0;
+      if (this.player_wins) {
+        this.winnerLooserMsg("YOU WIN !");
       }
-    }
-    if (this.rival_wins) {
-      fill(255);
-      textSize(50);
-      this.ball.y_velocity = 0;
-      this.ball.x_velocity = 0;
-      this.ball.x = BOARD_WIDTH - BOARD_WIDTH / 2;
-      this.ball.y = BOARD_HEIGHT / 2;
-      text("YOU LOOSE!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
+      if (this.rival_wins) {
+        this.winnerLooserMsg("YOU LOOSE !");
+      }
       if (frameCount % 600 == 0) {
         console.log("im getting here");
-
-        screen = 0;
+        this.player.restart();
+        this.rival.restart();
+        this.player_wins = false;
+        this.rival_wins = false;
+        this.musicPlayed = false;
+        this.ball.stop_state = true;
+        BACKGROUND_MUSIC.stop();
+        this.isGameOver = false; //set false to prepare for next round;
+        screen = 0; //back to main menu
       }
     }
   }
 
+  winnerLooserMsg(message) {
+    fill(255);
+    textSize(50);
+    text(message, BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
+  }
+
   checkGameOver() {
     if (this.player.score === BEST_OF) {
-      fill(255);
-      textSize(50);
-      text("YOU WIN!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
-      BACKGROUND_MUSIC.stop();
       this.player_wins = true;
-      return true;
+      this.isGameOver = true;
+      return;
     }
     if (this.rival.score === BEST_OF) {
-      fill(255);
-      textSize(50);
-      text("YOU LOOSE!", BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
-      BACKGROUND_MUSIC.stop();
       this.rival_wins = true;
-      // noLoop();
-      return true;
+      this.isGameOver = true;
+
+      return;
     }
     this.ball.stop();
     this.ball.relaunchBall();
