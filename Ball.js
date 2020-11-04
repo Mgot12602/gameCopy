@@ -15,6 +15,7 @@ class Ball {
     this.left_wall = 0;
     this.right_wall = BOARD_WIDTH - BALL_WIDTH;
     this.stop_state = false;
+    this.isFirstLoopOfStop = true;
   }
 
   restart() {
@@ -23,27 +24,28 @@ class Ball {
   }
 
   stop() {
-    this.x = BOARD_WIDTH - BOARD_WIDTH / 2;
-    this.y = BOARD_HEIGHT / 2;
-    // this.ball_speed = 5;
-    this.y_velocity = 0;
-    this.x_velocity = 0;
-    // if(frameCount %300===0){
-    // this.y_velocity = 6;
-    // this.x_velocity = 6;
-    // }
-    this.stop_state = true;
-    COUNTDOWN_SOUND.play(0.5, 1, 0.5, 0, 3);
-    return this.stop_state;
+    if (this.isFirstLoopOfStop) {
+      this.x = BOARD_WIDTH - BOARD_WIDTH / 2;
+      this.y = BOARD_HEIGHT / 2;
+      this.y_velocity = 0;
+      this.x_velocity = 0;
+
+      this.stop_state = true;
+      COUNTDOWN_SOUND.play(0.5, 1, 0.5, 0, 3);
+
+      this.isFirstLoopOfStop = false;
+      return this.stop_state;
+    }
   }
   relaunchBall() {
     //use this function to set the ball in the middle and wait for 5 seconds until relaunch the ball with a velocity.
 
-    if (this.stop_state && frameCount % 300 == 0) {
-      console.log(frameCount);
+    if (frameCount % 300 == 0) {
       this.stop_state = false;
       this.x_velocity = -6;
       this.y_velocity = 6;
+      SET_FOR_NEW_ROUND = false;
+      this.isFirstLoopOfStop = true;
       BOUNCE_SOUND.play(0, 1, 1, 0, 1.2);
     }
   }

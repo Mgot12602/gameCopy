@@ -8,6 +8,8 @@ class Game {
     this.player_wins = false;
     this.rival_wins = false;
     this.isGameOver = false;
+    this.hasTouchedTarget = false;
+    this.isFirstLoopOfNewGame = true;
   }
 
   setup() {
@@ -15,19 +17,23 @@ class Game {
   }
 
   draw() {
-    this.musicPlay();
+    this.setGame();
     this.board.draw();
     this.player.draw();
     this.rival.draw();
     this.ball.draw();
-    this.hitRival(this.ball, this.rival);
-    this.hitPlayer(this.ball, this.player);
-    this.targetCheck();
-    ///here we will check if the ball touches the player's discoball
+    this.hitTheBall();
+    this.targetCheck(); ///here we will check if the ball touches the player's discoball
     this.drawScore();
-    this.gameOver();
+    this.restartBall();
     //IF ball is stopped, we wait until 5 seconds with framecount until ball is relaunched again with a certain velocity.
-    if (!this.isGameOver) {
+
+    this.gameOver();
+  }
+
+  restartBall() {
+    if (SET_FOR_NEW_ROUND) {
+      this.ball.stop();
       this.ball.relaunchBall();
     }
   }
@@ -35,20 +41,60 @@ class Game {
   ///////////////////////
   ///HERE ALL METHODS///
   //////////////////////
-  targetCheck() {
-    if (this.targetCheckPlayer(this.ball, this.board)) {
-      BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
-      this.rival.score += 1;
+  setGame() {
+    if (this.isFirstLoopOfNewGame) {
+      this.isGameOver = false;
+      this.player.restart();
+      this.rival.restart();
+      this.player_wins = false;
+      this.rival_wins = false;
+      this.musicPlayed = false;
+      SET_FOR_NEW_ROUND = true;
+      this.musicPlay();
+      this.isFirstLoopOfNewGame = false;
+    }
+  }
+  hitTheBall() {
+    this.hitRival(this.ball, this.rival);
+    this.hitPlayer(this.ball, this.player);
+  }
 
-      this.checkGameOver();
+  targetCheck() {
+    if (!SET_FOR_NEW_ROUND) {
+      if (this.targetCheckPlayer(this.ball, this.board)) {
+        BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
+        this.rival.score += 1;
+        this.hasTouchedTarget = true;
+
+        this.checkGameOver();
+      }
+
+      ///here we will check if the ball touches the rival's discoball
+      if (this.targetCheckRival(this.ball, this.board)) {
+        BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
+        this.player.score += 1;
+        this.hasTouchedTarget = true;
+        //inside checkGameOver, we stop and relanuch the ball if next round and we stoop looping if score reached the BEST_OF value.
+        this.checkGameOver();
+      }
     }
-    ///here we will check if the ball touches the rival's discoball
-    if (this.targetCheckRival(this.ball, this.board)) {
-      BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
-      this.player.score += 1;
-      //inside checkGameOver, we stop and relanuch the ball if next round and we stoop looping if score reached the BEST_OF value.
-      this.checkGameOver();
+  }
+
+  checkGameOver() {
+    if (this.player.score === BEST_OF) {
+      this.player_wins = true;
+      this.isGameOver = true;
+      return;
     }
+    if (this.rival.score === BEST_OF) {
+      this.rival_wins = true;
+      this.isGameOver = true;
+
+      return;
+    }
+
+    SET_FOR_NEW_ROUND = true;
+    // this.ball.restartBall();
   }
 
   musicPlay() {
@@ -78,18 +124,16 @@ class Game {
         this.winnerLooserMsg("YOU LOOSE !");
       }
       if (frameCount % 600 == 0) {
-        console.log("im getting here");
-        this.player.restart();
-        this.rival.restart();
-        this.player_wins = false;
-        this.rival_wins = false;
-        this.musicPlayed = false;
-        this.ball.stop_state = true;
-        BACKGROUND_MUSIC.stop();
-        this.isGameOver = false; //set false to prepare for next round;
+        this.setToDefaultBeforeLeaving();
+
+        // this.isGameOver = false; //set false to prepare for next round;
         screen = 0; //back to main menu
       }
     }
+  }
+  setToDefaultBeforeLeaving() {
+    this.isFirstLoopOfNewGame = true;
+    BACKGROUND_MUSIC.stop();
   }
 
   winnerLooserMsg(message) {
@@ -98,20 +142,9 @@ class Game {
     text(message, BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2);
   }
 
-  checkGameOver() {
-    if (this.player.score === BEST_OF) {
-      this.player_wins = true;
-      this.isGameOver = true;
-      return;
+  newRound() {
+    if (this.hasTouchedTarget && !this.isGameOver) {
     }
-    if (this.rival.score === BEST_OF) {
-      this.rival_wins = true;
-      this.isGameOver = true;
-
-      return;
-    }
-    this.ball.stop();
-    this.ball.relaunchBall();
   }
 
   drawScore() {
@@ -134,6 +167,7 @@ class Game {
     ) {
       return true;
     }
+    return false;
   }
   targetCheckRival(ball, board) {
     if (
@@ -143,9 +177,9 @@ class Game {
       ball.y >= board.rival_target_start_y &&
       ball.y <= board.rival_target_start_y + board.rival_target_height
     ) {
-      console.log("Player win");
       return true;
     }
+    return false;
   }
   hitRival(ball, rival) {
     if (

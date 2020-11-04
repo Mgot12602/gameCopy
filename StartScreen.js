@@ -3,10 +3,11 @@ class StartScreen {
     this.musicPlayed = false;
   }
   musicPlay() {
-    console.log(this.musicPlayed);
+    // console.log(this.musicPlayed);
     if (music_on && !pauseStatus && !this.musicPlayed) {
       INTRO_MUSIC.loop(0, 1, 0.3, 20);
       this.musicPlayed = true;
+      console.log("this.musicPlayed=", this.musicPlayed);
     }
   }
   // musicStop() {
@@ -24,13 +25,15 @@ class StartScreen {
     playButton.style("font-size", "48px");
   }
   play() {
+    this.musicPlayed = false;
     screen = 1;
     playButton.hide();
-    console.log("playbutton should be hidden");
+    console.log("this.musicPlayed=", this.musicPlayed);
     INTRO_MUSIC.stop();
   }
 
   draw() {
+    console.log("this.musicPlayed=", this.musicPlayed);
     this.musicPlay();
     image(START_BACKGROUND_IMG, 0, 0, 500, 730);
     playButton.show();
