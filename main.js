@@ -12,6 +12,9 @@ function preload() {
   BACKGROUND_MUSIC = loadSound("/sounds/5th.mp3");
   START_BACKGROUND_IMG = loadImage("/images/travolta.png");
   INTRO_MUSIC = loadSound("/sounds/shinydisco.mp3");
+  YOU_WIN = loadSound("/sounds/you-win.mp3");
+  YOU_LOOSE = loadSound("/sounds/you-loose.mp3");
+  START_SOUND = loadSound("/sounds/start.mp3");
 }
 
 const game = new Game();
@@ -25,7 +28,11 @@ function setup() {
   canvas.parent("canvas-holder");
   startScreen.setup();
   game.setup();
-  // BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
+  SAVED_SCORE = getItem("bestScore");
+  if (SAVED_SCORE == null) {
+    SAVED_SCORE = 0;
+    storeItem("bestScore", SAVED_SCORE);
+  }
 }
 
 function draw() {
@@ -50,29 +57,39 @@ const playAgainButton = document.getElementById("play-again");
 const musicOnButton = document.getElementById("music");
 
 playAgainButton.onclick = () => {
-  console.log("clicking");
-  game.restart();
-  loop();
+  if (screen == 1) {
+    console.log("clicking");
+    game.restart();
+    loop();
+  }
 };
 
 musicOnButton.onclick = () => {
   if (music_on) {
     BACKGROUND_MUSIC.stop();
+    INTRO_MUSIC.stop();
     music_on = false;
     console.log("Value of music on should be false", music_on);
     return;
   }
-
-  BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
-  music_on = true;
-  console.log("Value of music on should be true", music_on);
+  switch (screen) {
+    case 0:
+      INTRO_MUSIC.loop(1, 1, 0.3, 9, 240);
+      music_on = true;
+      console.log("Value of music on should be true", music_on);
+      return;
+    case 1:
+      BACKGROUND_MUSIC.loop(1, 1, 0.3, 9, 240);
+      music_on = true;
+      console.log("Value of music on should be true", music_on);
+  }
 };
 
 function keyPressed() {
   //If we press spacebar during the game (screen==1), we pause.
   if (keyCode === 32 && screen == 1) {
     if (pauseStatus) {
-      loop();
+      // loop();
       pauseStatus = false;
       if (music_on) {
         //seems this is not working...

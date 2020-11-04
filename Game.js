@@ -31,6 +31,10 @@ class Game {
     this.gameOver();
   }
 
+  ///////////////////////
+  ///HERE ALL METHODS///
+  //////////////////////
+
   restartBall() {
     if (SET_FOR_NEW_ROUND) {
       this.ball.stop();
@@ -38,9 +42,6 @@ class Game {
     }
   }
 
-  ///////////////////////
-  ///HERE ALL METHODS///
-  //////////////////////
   setGame() {
     if (this.isFirstLoopOfNewGame) {
       this.isGameOver = false;
@@ -84,17 +85,19 @@ class Game {
     if (this.player.score === BEST_OF) {
       this.player_wins = true;
       this.isGameOver = true;
+      YOU_WIN.play();
+      START_SOUND.play(0, 1, 0.2, 1);
+      BACKGROUND_MUSIC.stop();
       return;
     }
     if (this.rival.score === BEST_OF) {
       this.rival_wins = true;
       this.isGameOver = true;
-
+      YOU_LOOSE.play();
       return;
     }
 
     SET_FOR_NEW_ROUND = true;
-    // this.ball.restartBall();
   }
 
   musicPlay() {
@@ -116,6 +119,7 @@ class Game {
       this.ball.x_velocity = 0;
       this.ball.x = BOARD_WIDTH - BOARD_WIDTH / 2;
       this.ball.y = BOARD_HEIGHT / 2;
+      CURRENT_SCORE = this.player.score * 10 - this.rival.score * 5;
 
       if (this.player_wins) {
         this.winnerLooserMsg("YOU WIN !");
@@ -125,9 +129,12 @@ class Game {
       }
       if (frameCount % 600 == 0) {
         this.setToDefaultBeforeLeaving();
-
-        // this.isGameOver = false; //set false to prepare for next round;
+        if (CURRENT_SCORE > SAVED_SCORE) {
+          storeItem("bestScore", CURRENT_SCORE);
+          alert("NEW BEST SCORE!");
+        }
         screen = 0; //back to main menu
+        INTRO_MUSIC_PLAYED = false;
       }
     }
   }

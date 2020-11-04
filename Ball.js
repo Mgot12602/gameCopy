@@ -4,8 +4,7 @@ class Ball {
     this.y = BOARD_HEIGHT / 2;
     this.width = BALL_HEIGHT;
     this.height = BALL_HEIGHT;
-    // this.gravity = 0.2;
-    // this.ball_speed = 5;
+
     this.y_velocity = 6;
     this.x_velocity = 6;
 
@@ -51,10 +50,9 @@ class Ball {
   }
 
   draw() {
-    // this.velocity += this.gravity;
     this.x += this.x_velocity;
     this.y += this.y_velocity;
-    // console.log("this.x = ", this.x);
+
     if (this.y >= this.floor) {
       this.y = this.floor;
       this.y_velocity = -this.y_velocity;
