@@ -26,6 +26,7 @@ let pauseStatus = false;
 function setup() {
   let canvas = createCanvas(BOARD_WIDTH, BOARD_HEIGHT);
   canvas.parent("canvas-holder");
+
   startScreen.setup();
   game.setup();
   SAVED_SCORE = getItem("bestScore");
@@ -35,8 +36,17 @@ function setup() {
   }
 }
 
+// function mouseMoved() {
+//   userStartAudio();
+//   console.log("mouse moved");
+// }
+
 function draw() {
   clear();
+  if (focused) {
+    userStartAudio();
+  }
+
   background("black");
   switch (screen) {
     case 0:

@@ -39,9 +39,6 @@ class StartScreen {
   }
 
   bestScore() {
-    console.log("current score", CURRENT_SCORE);
-    console.log("saved score", SAVED_SCORE);
-
     fill(255);
     textSize(40);
     text(

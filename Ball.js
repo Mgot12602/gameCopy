@@ -41,8 +41,8 @@ class Ball {
 
     if (frameCount % 300 == 0) {
       this.stop_state = false;
-      this.x_velocity = -6;
-      this.y_velocity = 6;
+      this.x_velocity = -6 * (DIFFICULTY * 0.3 + 0.7);
+      this.y_velocity = Math.floor(Math.random() * 12 - 6);
       SET_FOR_NEW_ROUND = false;
       this.isFirstLoopOfStop = true;
       BOUNCE_SOUND.play(0, 1, 1, 0, 1.2);

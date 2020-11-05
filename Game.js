@@ -53,6 +53,8 @@ class Game {
       SET_FOR_NEW_ROUND = true;
       this.musicPlay();
       this.isFirstLoopOfNewGame = false;
+      ROUND = 1;
+      CURRENT_SCORE = 0;
     }
   }
   hitTheBall() {
@@ -75,6 +77,9 @@ class Game {
         BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
         this.player.score += 1;
         this.hasTouchedTarget = true;
+        CURRENT_SCORE += 10 * DIFFICULTY;
+        DIFFICULTY++;
+        console.log(CURRENT_SCORE);
         //inside checkGameOver, we stop and relanuch the ball if next round and we stoop looping if score reached the BEST_OF value.
         this.checkGameOver();
       }
@@ -97,6 +102,8 @@ class Game {
       return;
     }
 
+    ROUND++;
+    console.log(ROUND);
     SET_FOR_NEW_ROUND = true;
   }
 
@@ -119,7 +126,6 @@ class Game {
       this.ball.x_velocity = 0;
       this.ball.x = BOARD_WIDTH - BOARD_WIDTH / 2;
       this.ball.y = BOARD_HEIGHT / 2;
-      CURRENT_SCORE = this.player.score * 10 - this.rival.score * 5;
 
       if (this.player_wins) {
         this.winnerLooserMsg("YOU WIN !");
@@ -161,6 +167,9 @@ class Game {
     fill(255);
     textSize(25);
     text(`FROGGY:  ${this.rival.score}`, BOARD_WIDTH / 2 + 100, 25);
+    fill(255);
+    textSize(25);
+    text(`SCORE:  ${CURRENT_SCORE}`, BOARD_WIDTH / 2 - 50, BOARD_HEIGHT - 10);
   }
   targetCheckPlayer(ball, board) {
     if (
