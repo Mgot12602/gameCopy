@@ -58,6 +58,7 @@ class Game {
       this.isFirstLoopOfNewGame = false;
       ROUND = 1;
       CURRENT_SCORE = 0;
+      DIFFICULTY = 1;
     }
   }
   hitTheBall() {
