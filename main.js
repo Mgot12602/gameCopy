@@ -1,20 +1,20 @@
 function preload() {
-  BACK_GROUND_IMG = loadImage("/images/background.jpg");
-  PLAYER = loadImage("/images/tonymanero.jpg");
-  DISCO_BALL_PLAYER = loadImage("/images/discoball2.png");
-  DISCO_BALL_RIVAL = loadImage("/images/discoball2.png");
-  RIVAL = loadImage("/images/frog.png");
-  BALL = loadImage("/images/pork.png");
-  BOUNCE_SOUND = loadSound("/sounds/pork.mp3");
-  BALL_BREAK_SOUND = loadSound("/sounds/glass.mp3");
-  COUNTDOWN_SOUND = loadSound("/sounds/countdown.mp3");
-  FROG_SOUND = loadSound("/sounds/frog.mp3");
-  BACKGROUND_MUSIC = loadSound("/sounds/5th.mp3");
-  START_BACKGROUND_IMG = loadImage("/images/travolta.png");
-  INTRO_MUSIC = loadSound("/sounds/shinydisco.mp3");
-  YOU_WIN = loadSound("/sounds/you-win.mp3");
-  YOU_LOOSE = loadSound("/sounds/you-loose.mp3");
-  START_SOUND = loadSound("/sounds/start.mp3");
+  BACK_GROUND_IMG = loadImage("./images/background.jpg");
+  PLAYER = loadImage("./images/tonymanero.jpg");
+  DISCO_BALL_PLAYER = loadImage("./images/discoball2.png");
+  DISCO_BALL_RIVAL = loadImage("./images/discoball2.png");
+  RIVAL = loadImage("./images/frog.png");
+  BALL = loadImage("./images/pork.png");
+  BOUNCE_SOUND = loadSound("./sounds/pork.mp3");
+  BALL_BREAK_SOUND = loadSound("./sounds/glass.mp3");
+  COUNTDOWN_SOUND = loadSound("./sounds/countdown.mp3");
+  FROG_SOUND = loadSound("./sounds/frog.mp3");
+  BACKGROUND_MUSIC = loadSound("./sounds/5th.mp3");
+  START_BACKGROUND_IMG = loadImage("./images/travolta.png");
+  INTRO_MUSIC = loadSound("./sounds/shinydisco.mp3");
+  YOU_WIN = loadSound("./sounds/you-win.mp3");
+  YOU_LOOSE = loadSound("./sounds/you-loose.mp3");
+  START_SOUND = loadSound("./sounds/start.mp3");
 }
 
 const game = new Game();
