@@ -15,12 +15,12 @@ class Rival {
 
     if (this.y >= this.floor) {
       this.y = this.floor;
-      this.velocity = -4;
+      this.velocity = -4 * (DIFFICULTY * 0.3 + 0.7);
     }
     if (this.y <= this.ceiling) {
       // console.log("should move down");
       this.y = this.ceiling;
-      this.velocity = 4;
+      this.velocity = 4 * (DIFFICULTY * 0.3 + 0.7);
     }
     image(RIVAL, this.x, this.y, this.width, this.height);
   }
@@ -29,6 +29,6 @@ class Rival {
     this.score = 0;
     this.x = BOARD_WIDTH - BOARD_WIDTH / 5;
     this.y = BOARD_HEIGHT / 2;
-    this.velocity = 2;
+    this.velocity = 4;
   }
 }

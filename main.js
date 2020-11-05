@@ -50,28 +50,23 @@ function draw() {
   background("black");
   switch (screen) {
     case 0:
-      // console.log(screen);
       startScreen.draw();
       return;
     case 1:
       clear();
 
-      // console.log("am playing the game???");
-      // console.log(screen);
       game.draw();
       return;
   }
 }
 
-const playAgainButton = document.getElementById("play-again");
+const resetScoreButton = document.getElementById("reset_score");
 const musicOnButton = document.getElementById("music");
 
-playAgainButton.onclick = () => {
-  if (screen == 1) {
-    console.log("clicking");
-    game.restart();
-    loop();
-  }
+resetScoreButton.onclick = () => {
+  console.log("clicking");
+  SAVED_SCORE = 0;
+  storeItem("bestScore", SAVED_SCORE);
 };
 
 musicOnButton.onclick = () => {

@@ -44,6 +44,7 @@ class Ball {
       this.x_velocity = -6 * (DIFFICULTY * 0.3 + 0.7);
       this.y_velocity = Math.floor(Math.random() * 12 - 6);
       SET_FOR_NEW_ROUND = false;
+      SHOW_LEVEL_UP = false;
       this.isFirstLoopOfStop = true;
       BOUNCE_SOUND.play(0, 1, 1, 0, 1.2);
     }

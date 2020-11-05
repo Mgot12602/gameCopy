@@ -8,7 +8,7 @@ class Game {
     this.player_wins = false;
     this.rival_wins = false;
     this.isGameOver = false;
-    this.hasTouchedTarget = false;
+    this.levelUp = false;
     this.isFirstLoopOfNewGame = true;
   }
 
@@ -39,6 +39,9 @@ class Game {
     if (SET_FOR_NEW_ROUND) {
       this.ball.stop();
       this.ball.relaunchBall();
+      if (SHOW_LEVEL_UP === true) {
+        this.drawLevelUp();
+      }
     }
   }
 
@@ -67,7 +70,7 @@ class Game {
       if (this.targetCheckPlayer(this.ball, this.board)) {
         BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
         this.rival.score += 1;
-        this.hasTouchedTarget = true;
+        // this.hasTouchedTarget = true;
 
         this.checkGameOver();
       }
@@ -76,7 +79,7 @@ class Game {
       if (this.targetCheckRival(this.ball, this.board)) {
         BALL_BREAK_SOUND.play(0, 1, 1, 0, 1.2);
         this.player.score += 1;
-        this.hasTouchedTarget = true;
+        SHOW_LEVEL_UP = true;
         CURRENT_SCORE += 10 * DIFFICULTY;
         DIFFICULTY++;
         console.log(CURRENT_SCORE);
@@ -160,17 +163,31 @@ class Game {
     }
   }
 
+  drawLevelUp() {
+    fill(255);
+    textSize(50);
+    text(`LEVEL UP!`, BOARD_WIDTH / 2 - 100, BOARD_HEIGHT / 2 - 100);
+  }
+
   drawScore() {
     fill(255);
     textSize(25);
-    text(`YOU: ${this.player.score}`, BOARD_WIDTH / 2 - 200, 25);
+    text(`YOU: ${this.player.score} / ${BEST_OF}`, BOARD_WIDTH / 2 - 200, 25);
     fill(255);
     textSize(25);
-    text(`FROGGY:  ${this.rival.score}`, BOARD_WIDTH / 2 + 100, 25);
+    text(
+      `FROGGY:  ${this.rival.score} / ${BEST_OF}`,
+      BOARD_WIDTH / 2 + 100,
+      25
+    );
     fill(255);
     textSize(25);
-    text(`SCORE:  ${CURRENT_SCORE}`, BOARD_WIDTH / 2 - 50, BOARD_HEIGHT - 10);
+    text(`SCORE:  ${CURRENT_SCORE}`, 50, BOARD_HEIGHT - 20);
+    fill(255);
+    textSize(25);
+    text(`LEVEL:  ${DIFFICULTY}`, BOARD_WIDTH - 200, BOARD_HEIGHT - 20);
   }
+
   targetCheckPlayer(ball, board) {
     if (
       ball.x <=

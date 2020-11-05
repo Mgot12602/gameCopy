@@ -8,9 +8,19 @@ body {
 
 body {
   margin: 20, 20;
+}
+h1 {
+  font-size: 3rem;
+  margin: 20;
+}
+
+#music {
+  align-self: flex-start;
+}
+.container {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 
   /* This centers our sketch horizontally. */
   justify-content: center;
@@ -18,11 +28,14 @@ body {
   /* This centers our sketch vertically. */
   align-items: center;
 }
-h1 {
-  font-size: 3rem;
-  margin: 20 20;
-}
 
-#music {
-  align-self: flex-start;
+.row {
+  display: flex;
+  width: 100%;
+}
+.column {
+  flex: 50%;
+  justify-content: flex-start;
+  text-align: center;
+  align-content: flex-start;
 }
